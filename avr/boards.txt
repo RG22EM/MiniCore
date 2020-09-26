@@ -10,7 +10,7 @@
 ##                                                                                              ##
 ## |             | 1000000 | 500000 | 250000 | 230400 | 115200 | 57600 | 38400 | 19200 | 9600 | ##
 ## |-------------|---------|--------|--------|--------|--------|-------|-------|-------|------| ##
-## | 24 MHz      |         |
+## | 24 MHz      |  X      |  X		|  X	 |  X	  |  X	   |  X	   |  X	   |  X    |      | ##			
 ## | 20 MHz      |         |  X     |  X     |        |  X     |       |       |  X    |      | ##
 ## | 18.4320 MHz |         |        |        |  X     |  X     |  X    |  X    |  X    |  X   | ##
 ## | 16 MHz      |  X      |  X     |  X     |        |  X     |       |  X    |  X    |  X   | ##
@@ -117,6 +117,11 @@ menu.bootloader=Bootloader
 328.menu.clock.16MHz_external.upload.speed=115200
 328.menu.clock.16MHz_external.bootloader.low_fuses=0b1111{bootloader.cksel_bits}
 328.menu.clock.16MHz_external.build.f_cpu=16000000L
+
+328.menu.clock.24MHz_external=External 24 MHz
+328.menu.clock.24MHz_external.upload.speed=115200
+328.menu.clock.24MHz_external.bootloader.low_fuses=0b1111{bootloader.cksel_bits}
+328.menu.clock.24MHz_external.build.f_cpu=24000000L
 
 328.menu.clock.20MHz_external=External 20 MHz
 328.menu.clock.20MHz_external.upload.speed=115200
@@ -247,6 +252,11 @@ menu.bootloader=Bootloader
 168.menu.clock.16MHz_external.upload.speed=115200
 168.menu.clock.16MHz_external.bootloader.low_fuses=0b1111{bootloader.cksel_bits}
 168.menu.clock.16MHz_external.build.f_cpu=16000000L
+
+168.menu.clock.24MHz_external=External 24 MHz
+168.menu.clock.24MHz_external.upload.speed=115200
+168.menu.clock.24MHz_external.bootloader.low_fuses=0b1111{bootloader.cksel_bits}
+168.menu.clock.24MHz_external.build.f_cpu=24000000L
 
 168.menu.clock.20MHz_external=External 20 MHz
 168.menu.clock.20MHz_external.upload.speed=115200
