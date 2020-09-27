@@ -11,8 +11,10 @@ If you're into "generic" AVR programming, I'm happy to tell you that all relevan
 * [Supported clock frequencies](#supported-clock-frequencies)
 * [Bootloader option](#bootloader-option)
 * [BOD option](#bod-option)
+* [EEPROM retain option](#eeprom-option)
 * [Link time optimization / LTO](#link-time-optimization--lto)
 * [Printf support](#printf-support)
+* [Pin macros](#pin-macros)
 * [Programmers](#programmers)
 * [Write to own flash](#write-to-own-flash)
 * **[How to install](#how-to-install)**
@@ -53,7 +55,7 @@ Make sure you connect an ISP programmer, and select the correct one in the "Prog
 You might experience upload issues when using the internal oscillator. It's factory calibrated but may be a little "off" depending on the calibration, ambient temperature and operating voltage. If uploading failes while using the 8 MHz internal oscillator you have these options:
 * Edit the baudrate line in the boards.txt file, and choose either 115200, 57600, 38400 or 19200 baud.
 * Upload the code using a programmer (USBasp, USBtinyISP etc.) or skip the bootloader by holding down the shift key while clicking the "Upload" button
-* Use the 1 MHz option instead
+* Use the 4, 2 or 1 MHz option instead
 
 | Frequency   | Oscillator type             | Comment                                                       |
 |-------------|-----------------------------|---------------------------------------------------------------|
@@ -65,9 +67,14 @@ You might experience upload issues when using the internal oscillator. It's fact
 | 11.0592 MHz | External crystal/oscillator | Great clock for UART communication with no error              |
 | 8 MHz       | External crystal/oscillator | Common clock when working with 3.3V                           |
 | 7.3728 MHz  | External crystal/oscillator | Great clock for UART communication with no error              |
+| 4 MHz       | External crystal/oscillator |                                                               |
 | 3.6864 MHz  | External crystal/oscillator | Great clock for UART communication with no error              |
+| 2 MHz       | External crystal/oscillator |                                                               |
 | 1.8432 MHz  | External crystal/oscillator | Great clock for UART communication with no error              |
+| 1 MHz       | External crystal/oscillator |                                                               |
 | 8 MHz       | Internal oscillator         | Might cause UART upload issues. See comment above this table  |
+| 4 MHz       | Internal oscillator         | Derived from the 8 MHz internal oscillator                    |
+| 2 MHz       | Internal oscillator         | Derived from the 8 MHz internal oscillator                    |
 | 1 MHz       | Internal oscillator         | Derived from the 8 MHz internal oscillator                    |
 
 
@@ -90,6 +97,10 @@ Brown out detection, or BOD for short lets the microcontroller sense the input v
 | Disabled  | Disabled  | Disabled | Disabled | Disabled |
 
 
+## EEPROM option
+If you want the EEPROM to be erased every time you burn the bootloader or upload using a programmer, you can turn off this option. You'll have to connect an ISP programmer and hit "Burn bootloader" to enable or disable EEPROM retain. Note that when uploading using a bootloader, the EEPROM will always be retained.
+
+
 ## Link time optimization / LTO
 After Arduino IDE 1.6.11 where released, There have been support for link time optimization or LTO for short. The LTO optimizes the code at link time, making the code (often) significantly smaller without making it "slower". In Arduino IDE 1.6.11 and newer LTO is enabled by default. I've chosen to disable this by default to make sure the core keep its backwards compatibility. Enabling LTO in IDE 1.6.10 or older will return an error. 
 I encourage you to try the new LTO option and see how much smaller your code gets! Note that you don't need to hit "Burn Bootloader" in order to enable LTO. Simply enable it in the "Tools" menu, and your code is ready for compilation. If you want to read more about LTO and GCC flags in general, head over to the [GNU GCC website](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)!
@@ -98,7 +109,20 @@ I encourage you to try the new LTO option and see how much smaller your code get
 ## Printf support
 Unlike the official Arduino cores, MiniCore has printf support out of the box. If you're not familiar with printf you should probably [read this first](https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm). It's added to the Print class and will work with all libraries that inherit Print. Printf is a standard C function that lets you format text much easier than using Arduino's built-in print and println. Note that this implementation of printf will NOT print floats or doubles. This is a limitation of the avr-libc printf implementation on AVR microcontrollers, and nothing I can easily fix.
 
-If you're using a serial port, simply use `Serial.printf("Milliseconds since start: %ld\n", millis());`. Other libraries that inherit the Print class (and thus supports printf) are the LiquidCrystal LCD library and the U8G2 graphical LCD library.
+If you're using a serial port, simply use `Serial.printf("Milliseconds since start: %ld\n", millis());`. You can also use the `F()` macro if you need to store the string in flash. Other libraries that inherit the Print class (and thus supports printf) are the LiquidCrystal LCD library and the U8G2 graphical LCD library.
+
+
+## Pin macros
+Note that you don't have to use the digital pin numbers to refer to the pins. You can also use some predefined macros that maps "Arduino pins" to the port and port number:
+
+```c++
+// Use PIN_PB5 macro to refer to pin PB5 (Arduino pin 13)
+digitalWrite(PIN_PB5, HIGH);
+
+// Results in the exact same compiled code
+digitalWrite(13, HIGH);
+
+```
 
 
 ## Programmers
