@@ -21,6 +21,7 @@
   Modified 24 November 2006 by David A. Mellis
   Modified 1 August 2010 by Mark Sproul
   Modified 24 April 2017 by MCUdude
+  Modified 30.09.2020 by Victor UA6EM
 */
 
 #include <inttypes.h>
@@ -70,7 +71,8 @@ void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode)
     // to the configuration bits in the hardware register, so we simply shift
     // the mode into place.
     
-    // Enable interrupt        
+    // Enable interrupt
+    EIFR = 0x01;
     switch(interruptNum) 
     {
 // ATmega64, ATmega128, ATmega1281, ATmega2561, AT90CAN32, AT90CAN64, AT90CAN128
